@@ -6,6 +6,8 @@
   Eğer bunları sağlamazsanız Testler geçmez ve diğer yazılımcılar bu repoyu klonladıklarında
   projeyi beklendiği gibi çalıştıramazlar.
  */
+require("dotenv").config();
+const jwtSecret = process.env.JWT_SECRET || "shh";
 module.exports = {
-  jwtSecret: process.env.JWT_SECRET || "shh",
+  JWT_SECRET: jwtSecret,
 };

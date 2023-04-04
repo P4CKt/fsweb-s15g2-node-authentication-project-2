@@ -3,6 +3,7 @@ const { usernameVarmi, rolAdiGecerlimi } = require("./auth-middleware");
 const { JWT_SECRET } = require("../secrets"); // bu secret'ı kullanın!
 const { ekle } = require("../users/users-model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 router.post("/register", rolAdiGecerlimi, async (req, res, next) => {
   try {
@@ -33,22 +34,20 @@ router.post("/register", rolAdiGecerlimi, async (req, res, next) => {
 
 router.post("/login", usernameVarmi, (req, res, next) => {
   try {
-    if (bcrypt.compareSync(req.body.password, req.users.password)) {
+    if (bcrypt.compareSync(req.body.password, req.newusers.password)) {
       const payload = {
-        subject: req.users.user_id,
-        username: req.users.username,
-        role_name: req.users.role_name,
+        subject: req.newusers.user_id,
+        username: req.newusers.username,
+        role_name: req.newusers.role_name,
       };
       const options = {
         expiresIn: "1d",
       };
 
-      let token = jwt.sign(payload, JWT_SECRET.jwtSecret, options);
-      next({
-        status: 200,
-
-        message: `${req.users.username} geri geldi!`,
-        token: token,
+      const createToken = jwt.sign(payload, JWT_SECRET, options);
+      res.status(200).json({
+        message: `${req.newusers.username} geri geldi!`,
+        token: createToken,
       });
     } else {
       next({ status: 401, message: "Geçersiz kriter!" });

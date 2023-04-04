@@ -3,7 +3,8 @@ const db = require("../../data/db-config.js");
 async function bul() {
   return await db("users as u")
     .leftJoin("roles as r", "u.role_id", "r.role_id")
-    .select("u.user_id", "u.username", "r.role_name");
+    .select("u.user_id", "u.username", "r.role_name")
+    .orderBy("u.user_id", "asc");
 
   /**
     2 tabloyu birleştirmeniz lazım (join)
@@ -27,6 +28,7 @@ async function bul() {
 async function goreBul(filtre) {
   return await db("users as u")
     .leftJoin("roles as r", "u.role_id", "r.role_id")
+    .select("u.user_id", "u.username", "u.password", "r.role_name")
     .where(filtre);
   /**
     2 tabloyu birleştirmeniz gerekiyor

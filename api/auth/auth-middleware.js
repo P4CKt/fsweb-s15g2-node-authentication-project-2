@@ -5,29 +5,25 @@ const { goreBul } = require("../users/users-model");
 
 const sinirli = (req, res, next) => {
   try {
-    if (!req.headers.authorization) {
+    let auth = req.headers["authorization"];
+    if (!auth) {
       next({
         status: 401,
-
         message: "Token gereklidir",
       });
     } else {
-      return jwt.verify(
-        req.headers["authorization"],
-        JWT_SECRET.jwtSecret,
-        (err, decoded) => {
-          if (err) {
-            next({
-              status: 401,
+      jwt.verify(auth, JWT_SECRET, (err, decoded) => {
+        if (err) {
+          next({
+            status: 401,
 
-              message: "Token gecersizdir",
-            });
-          } else {
-            req.decoded = decoded;
-            next();
-          }
+            message: "Token gecersizdir",
+          });
+        } else {
+          req.decoded = decoded;
+          next();
         }
-      );
+      });
     }
   } catch (error) {
     next(error);
@@ -78,13 +74,14 @@ const sadece = (role_name) => (req, res, next) => {
 
 const usernameVarmi = async (req, res, next) => {
   try {
-    const isContain = await goreBul("username", req.body.username);
+    const isContain = await goreBul({ username: req.body.username });
     if (isContain.length === 0) {
       next({
         status: 401,
         message: "Geçersiz kriter",
       });
     } else {
+      req.newusers = isContain[0];
       next();
     }
   } catch (error) {
@@ -115,22 +112,26 @@ const rolAdiGecerlimi = (req, res, next) => {
       "message": "rol adı 32 karakterden fazla olamaz"
     }
   */
-  if (!req.body.role_name || req.body.role_name.trim() === "") {
-    req.body.role_name = "student";
-    next();
-  } else if (req.body.role_name.trim() === "admin") {
-    next({
-      status: 422,
-      message: "Rol adı admin olamaz",
-    });
-  } else if (req.body.role_name.trim().length > 32) {
-    next({
-      status: 422,
-      message: "rol adı 32 karakterden fazla olamaz",
-    });
-  } else {
-    req.body.role_name = req.body.role_name.trim();
-    next();
+  try {
+    if (!req.body.role_name || req.body.role_name.trim() === "") {
+      req.body.role_name = "student";
+      next();
+    } else if (req.body.role_name.trim() === "admin") {
+      next({
+        status: 422,
+        message: "Rol adı admin olamaz",
+      });
+    } else if (req.body.role_name.trim().length > 32) {
+      next({
+        status: 422,
+        message: "rol adı 32 karakterden fazla olamaz",
+      });
+    } else {
+      req.body.role_name = req.body.role_name.trim();
+      next();
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
