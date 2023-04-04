@@ -18,18 +18,18 @@ Aşağıdaki görevleri tamamlamak ve uygulamanın tüm testleri geçmesi için 
 
 Erişim fonksiyonlarını `api/users/users-model.js` dosyasına yazacaksınız:
 
-- [ ] `bul`
-- [ ] `goreBul`
-- [ ] `idyeGoreBul`
+- [+] `bul`
+- [+] `goreBul`
+- [+] `idyeGoreBul`
 
 #### 2B - Middleware Fonksiyonları
 
 Auth middlewarelarını `api/auth/auth-middleware.js` dosyasına yazacaksınız:
 
-- [ ] `sinirli`
-- [ ] `sadece`
-- [ ] `usernameVarmi`
-- [ ] `rolAdiGecerlimi`
+- [+] `sinirli`
+- [+] `sadece`
+- [+] `usernameVarmi`
+- [+] `rolAdiGecerlimi`
 
 #### 2C - Uçnoktalar
 
@@ -37,8 +37,8 @@ Kimlik doğrulama, JSON Web Tokenler kullanılarak uygulanacaktır.
 
 Aşağıdaki uçnoktaları `api/auth/auth-router.js` dosyasına yazın:
 
-- [ ] `[POST] /api/auth/register`
-- [ ] `[POST] /api/auth/login`
+- [+] `[POST] /api/auth/register`
+- [+] `[POST] /api/auth/login`
 
 `api/users/users-router.js` içindeki uçnoktalar hazır ama yine de bir göz atın:
 
